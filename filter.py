@@ -1,5 +1,7 @@
 
 from material import test_library
+import os
+import re
 
 
 class Filter(object):
@@ -53,8 +55,40 @@ class Filter(object):
         with open('{}n.i'.format(self.ID), 'w+') as F:
             F.write(s)
 
+    def write(self):
+        self.write_neutron()
+
+    def extract_neutron(self):
+        with open('{}n.io'.format(self.ID), 'r') as f:
+            mcnpOutput = f.read()
+        s = r'1tally'
+        tallyLocator = re.compile(s)
+        tallyIndx = tallyLocator.finditer(mcnpOutput)
+        indx = []
+        for match in tallyIndx:
+            indx.append(match.span()[1])
+        s = r'\d.\d\d\d\dE[+-]\d\d   \d.\d\d\d\d\dE[+-]\d\d \d.\d\d\d\d'
+        dataPtrn = re.compile(s)
+        keys = [11, 21]
+        d = {keys[0]: {'energy': [], 'value': [], 'sigma': []}, keys[1]: {'energy': [], 'value': [], 'sigma': []}}
+        for i in range(len(keys)):
+            data = dataPtrn.finditer(mcnpOutput[indx[i]:indx[i + 1]])
+            for datum in data:
+                dataStr = datum.group().split()
+                d[keys[i]]['energy'].append(float(dataStr[0]))
+                d[keys[i]]['value'].append(float(dataStr[1]))
+                d[keys[i]]['sigma'].append(float(dataStr[2]))
+        self.n_tot = d[11]['value'][4] + d[11]['value'][5]
+        self.n_g = d[21]['value'][4] + d[21]['value'][5]
+        self.fast_to_total = d[11]['value'][5] / self.n_tot
+
+    def run_local(self):
+        os.system('mcnp6 name={}n.i'.format(self.ID))
+
 
 if __name__ == '__main__':
     c = [10, 1, 2, 3, 2, 2, 1, 2, 1, 2, 3, 1, 2, 3, 1, 2, 2, 1, 1, 1, 2, 2, 1, 2, 1, 2, 2, 1, 1, 2, 1]
     indiv = Filter(0, c)
     indiv.write_neutron()
+    indiv.run_local()
+    indiv.extract_neutron()
