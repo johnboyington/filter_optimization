@@ -2,6 +2,7 @@
 from material import test_library
 import os
 import re
+from fitness_function import fitness
 
 
 class Filter(object):
@@ -145,6 +146,9 @@ class Filter(object):
         os.system('rm {}g.i*'.format(self.ID))
         self.neutron_to_gamma = self.n_tot / (self.g_g + self.n_g)
 
+    def calc_fitness(self):
+        self.fitness = fitness(self.fast_to_total, self.neutron_to_gamma, self.n_tot)
+
     def run_local(self):
         os.system('mcnp6 name={}n.i'.format(self.ID))
         os.system('mcnp6 name={}g.i'.format(self.ID))
@@ -156,3 +160,7 @@ if __name__ == '__main__':
     indiv.write()
     indiv.run_local()
     indiv.extract()
+    indiv.calc_fitness()
+    print('------------------')
+    print(indiv.fitness)
+    print('------------------')
