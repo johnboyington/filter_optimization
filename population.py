@@ -21,7 +21,8 @@ class Population(object):
         self.num_disc = 30
         self.num_mat = len(test_library.lib)
         self.next_gen_size = 10
-        self.children_per_crossover = 2
+        self.mut_per_gen = 2
+        self.max_population = 10
 
     def spawn_random(self, ID):
         chrom = []
@@ -49,6 +50,8 @@ class Population(object):
         for i in self.current_generation:
             pdf.append(i.fitness)
         pdf = np.array(pdf)
+        if len(pdf) > self.max_population:
+            pdf = pdf[-self.max_population:]
         pdf = pdf / np.sum(pdf)
         cdf = []
         for i, p in enumerate(pdf):
@@ -72,10 +75,13 @@ class Population(object):
         return parent_1, parent_2
 
     def init_next_gen(self):
-        # TODO: finish this fucntion
         for i in range(self.next_gen_size):
-            self.next_generation += [self.spawn_random(self.historic_population)]
+            self.next_generation += [ops.splice(self.select())]
             self.historic_population += 1
+        for i in range(self.mut_per_gen):
+            lucky = randint(0, len(self.next_generation) - 1)
+            self.next_generation[lucky] = ops.mutate(self.next_generation[lucky])
+        self.current_generation += self.next_generation
         return
 
     def plot_current_gen(self):

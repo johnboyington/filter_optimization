@@ -25,7 +25,8 @@ class Operations(object):
                 child_chrom += parent_2.chromosome[genome]
         return Filter(child_ID, child_chrom)
 
-    def mutate(self, ID, individual, gene):
+    def mutate(self, individual):
+        gene = randint(0, 30)
         assert isinstance(individual, Filter), 'mutating requires Filter objects'
         if gene == 1:
             new_gene = rand() * (self.max_length - self.min_length) + self.min_length
@@ -33,6 +34,6 @@ class Operations(object):
             new_gene = [randint(0, self.num_mat - 1)]
         chrom = individual.chromosome
         chrom[gene] = new_gene
-        return Filter(ID, chrom)
+        return Filter(individual.ID, chrom)
 
 ops = Operations()
