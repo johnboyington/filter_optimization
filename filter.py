@@ -15,6 +15,7 @@ class Filter(object):
         self.materials = self.chromosome[1:]
         self.set_params()
         self.get_materials()
+        self.fitness = -1
 
     def set_params(self):
         self.num_disc = 30
@@ -150,8 +151,11 @@ class Filter(object):
         self.fitness = fitness(self.fast_to_total, self.neutron_to_gamma, self.n_tot)
 
     def run_local(self):
+        self.write()
         os.system('mcnp6 name={}n.i'.format(self.ID))
         os.system('mcnp6 name={}g.i'.format(self.ID))
+        self.extract()
+        self.calc_fitness()
 
 
 if __name__ == '__main__':
