@@ -10,12 +10,12 @@ class Test_Cycle(object):
 
     def iterate(self):
         self.origin()
-        for i in range(len(self.num_generations)):
+        for i in range(self.num_generations):
             self.cycle()
             self.plot()
 
     def origin(self):
-        self.test = Population(20)
+        self.test = Population(10)
         self.test.init_current_gen()
         self.test.run_current_gen()
         self.test.sort_current_gen()
@@ -30,4 +30,4 @@ class Test_Cycle(object):
 
 
 if __name__ == '__main__':
-    test = Test_Cycle(10)
+    test = Test_Cycle(3)

@@ -76,7 +76,7 @@ class Population(object):
 
     def init_next_gen(self):
         for i in range(self.next_gen_size):
-            self.next_generation += [ops.splice(self.select())]
+            self.next_generation += [ops.splice(self.historic_population, *self.select())]
             self.historic_population += 1
         for i in range(self.mut_per_gen):
             lucky = randint(0, len(self.next_generation) - 1)

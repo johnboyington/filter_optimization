@@ -20,9 +20,9 @@ class Operations(object):
         child_chrom = []
         for genome in range(len(parent_1.chromosome)):
             if rand() > 0.5:
-                child_chrom += parent_1.chromosome[genome]
+                child_chrom += [parent_1.chromosome[genome]]
             else:
-                child_chrom += parent_2.chromosome[genome]
+                child_chrom += [parent_2.chromosome[genome]]
         return Filter(child_ID, child_chrom)
 
     def mutate(self, individual):
