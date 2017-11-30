@@ -150,6 +150,9 @@ class Filter(object):
     def calc_fitness(self):
         self.fitness = fitness(self.fast_to_total, self.neutron_to_gamma, self.n_tot)
 
+    def get_fitness(self):
+        return self.fitness
+
     def run_local(self):
         self.write()
         os.system('mcnp6 name={}n.i tasks 26'.format(self.ID))

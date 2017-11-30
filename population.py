@@ -1,5 +1,6 @@
 from filter import Filter
 from numpy.random import rand, randint
+import numpy as np
 from material import test_library
 from operations import ops
 import matplotlib.pyplot as plt
@@ -41,9 +42,38 @@ class Population(object):
             if ind.fitness == -1:
                 ind.run_local()
 
+    def sort_current_gen(self):
+        self.current_generation = sorted(self.current_generation, key=Filter.get_fitness)
+        # calculate CDF
+        pdf = []
+        for i in self.current_generation:
+            pdf.append(i.fitness)
+        pdf = np.array(pdf)
+        pdf = pdf / np.sum(pdf)
+        cdf = []
+        for i, p in enumerate(pdf):
+            cdf.append(np.sum(pdf[:i+1]))
+        self.cdf = cdf
+
+    def select(self):
+        r1 = rand()
+        r2 = rand()
+        found_1 = False
+        found_2 = False
+        for i, ind in enumerate(self.cdf):
+            if r1 < ind and not found_1:
+                parent_1 = self.current_generation[i]
+                found_1 = True
+            if r2 < ind and not found_2:
+                parent_2 = self.current_generation[i]
+                found_2 = True
+            if found_1 and found_2:
+                break
+        return parent_1, parent_2
+
     def init_next_gen(self):
         # TODO: finish this fucntion
-        for i in range(self.initial_population):
+        for i in range(self.next_gen_size):
             self.next_generation += [self.spawn_random(self.historic_population)]
             self.historic_population += 1
         return
@@ -62,4 +92,7 @@ if __name__ == '__main__':
     test = Population(4)
     test.init_current_gen()
     test.run_current_gen()
-    test.plot_current_gen()
+    test.sort_current_gen()
+    p1, p2 = test.select()
+    print(p1.ID, p2.ID)
+    # test.plot_current_gen()
