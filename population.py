@@ -45,13 +45,13 @@ class Population(object):
 
     def sort_current_gen(self):
         self.current_generation = sorted(self.current_generation, key=Filter.get_fitness)
+        if len(self.current_generation) > self.max_population:
+            self.current_generation = self.current_generation[-self.max_population:]
         # calculate CDF
         pdf = []
         for i in self.current_generation:
             pdf.append(i.fitness)
         pdf = np.array(pdf)
-        if len(pdf) > self.max_population:
-            pdf = pdf[-self.max_population:]
         pdf = pdf / np.sum(pdf)
         cdf = []
         for i, p in enumerate(pdf):

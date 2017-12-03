@@ -31,7 +31,7 @@ class Operations(object):
         if gene == 1:
             new_gene = rand() * (self.max_length - self.min_length) + self.min_length
         else:
-            new_gene = [randint(0, self.num_mat - 1)]
+            new_gene = randint(0, self.num_mat - 1)
         chrom = individual.chromosome
         chrom[gene] = new_gene
         return Filter(individual.ID, chrom)
