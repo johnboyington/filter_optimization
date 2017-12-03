@@ -4,25 +4,30 @@ import numpy as np
 from material import test_library
 from operations import ops
 import matplotlib.pyplot as plt
+import copy
 
 
 class Population(object):
 
-    def __init__(self, initial_pop):
+    def __init__(self, initial_pop, store_all):
         self.initial_population = initial_pop
         self.set_params()
         self.current_generation = []
         self.historic_population = 0
         self.next_generation = []
+        self.store_all = store_all
+        if self.store_all:
+            self.store_all
+            self.legacy = []
 
     def set_params(self):
         self.min_length = 3
         self.max_length = 20
         self.num_disc = 30
         self.num_mat = len(test_library.lib)
-        self.next_gen_size = 10
+        self.next_gen_size = 5
         self.mut_per_gen = 2
-        self.max_population = 10
+        self.max_population = 5
 
     def spawn_random(self, ID):
         chrom = []
@@ -45,6 +50,7 @@ class Population(object):
 
     def sort_current_gen(self):
         self.current_generation = sorted(self.current_generation, key=Filter.get_fitness)
+        self.legacy.append(copy.deepcopy(self.current_generation))
         if len(self.current_generation) > self.max_population:
             self.current_generation = self.current_generation[-self.max_population:]
         # calculate CDF
@@ -57,6 +63,13 @@ class Population(object):
         for i, p in enumerate(pdf):
             cdf.append(np.sum(pdf[:i+1]))
         self.cdf = cdf
+
+    def store_current_gen(self):
+        s = ''
+        for i in self.current_generation:
+            s += '{:10.6f}  {:10.6f}   {}\n'.format(i.fitness, i.chromosome[0], np.array(i.chromosome[1:]))
+        with open('data.txt', 'a') as F:
+            F.write(s)
 
     def select(self):
         r1 = rand()
@@ -91,6 +104,19 @@ class Population(object):
             fitnesses.append(self.current_generation[i].fitness)
         plt.figure(10)
         plt.plot(ids, fitnesses, 'ko')
+        plt.show()
+
+    def plot_legacy(self):
+        ids = range(len(self.current_generation))
+        plt.figure(20)
+        plt.xlabel('individual')
+        plt.ylabel('fitness')
+        for n, l in enumerate(self.legacy):
+            fitnesses = []
+            for i in ids:
+                fitnesses.append(l[i].fitness)
+                plt.plot(ids, fitnesses, linestyle='None', marker='o', label='gen {}'.format(n))
+        plt.legend()
         plt.show()
 
 

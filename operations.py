@@ -28,7 +28,7 @@ class Operations(object):
     def mutate(self, individual):
         gene = randint(0, 30)
         assert isinstance(individual, Filter), 'mutating requires Filter objects'
-        if gene == 1:
+        if gene == 0:
             new_gene = rand() * (self.max_length - self.min_length) + self.min_length
         else:
             new_gene = randint(0, self.num_mat - 1)
