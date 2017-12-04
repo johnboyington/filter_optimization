@@ -25,9 +25,9 @@ class Population(object):
         self.max_length = 20
         self.num_disc = 30
         self.num_mat = len(test_library.lib)
-        self.next_gen_size = 5
-        self.mut_per_gen = 2
-        self.max_population = 5
+        self.next_gen_size = 32
+        self.mut_per_gen = 3
+        self.max_population = 32
 
     def spawn_random(self, ID):
         chrom = []
@@ -50,6 +50,7 @@ class Population(object):
 
     def sort_current_gen(self):
         self.current_generation = sorted(self.current_generation, key=Filter.get_fitness)
+        self.best_filter = self.current_generation[-1]
         self.legacy.append(copy.deepcopy(self.current_generation))
         if len(self.current_generation) > self.max_population:
             self.current_generation = self.current_generation[-self.max_population:]
@@ -67,8 +68,24 @@ class Population(object):
     def store_current_gen(self):
         s = ''
         for i in self.current_generation:
-            s += '{:10.6f}  {:10.6f}   {}\n'.format(i.fitness, i.chromosome[0], np.array(i.chromosome[1:]))
-        with open('data.txt', 'a') as F:
+            args = i.fitness, i.fast_to_total, i.neutron_to_gamma, i.n_tot, i.chromosome[0]
+            s += '{:10.6f}  {:10.6f}  {:10.6f}  {:10.6f}  {:10.6f} '.format(*args)
+            arr = np.array(i.chromosome[1:])
+            for m in arr:
+                s += '  {:3d}'.format(m)
+            s += '\n'
+        with open('data.txt', 'a+') as F:
+            F.write(s)
+
+    def store_best_filter(self):
+        best = self.best_filter
+        s = ''
+        args = best.fitness, best.fast_to_total, best.neutron_to_gamma, best.n_tot, best.chromosome[0]
+        s += '{:10.6f}  {:10.6f}  {:10.6f}  {:10.6f}  {:10.6f}\n'.format(*args)
+        arr = np.array(best.chromosome[1:])
+        for m in arr:
+            s += '  {:3d}'.format(m)
+        with open('best_filter.txt', 'a+') as F:
             F.write(s)
 
     def select(self):
