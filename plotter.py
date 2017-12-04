@@ -11,18 +11,18 @@ class Plot(object):
 
     def get_data(self):
         n = 5
-        g = 32
+        g = 240
         self.data = np.loadtxt('data.txt').reshape(n, g, -1)
 
     def plot_legacy(self):
         plt.figure(30)
         for n, i in enumerate(self.data):
             i = i.T
-            plt.plot(range(32), i[0], marker='o', label='gen {}'.format(n))
+            plt.plot(range(240), i[0], label='gen {}'.format(n))
         plt.xlabel('Individual (Ordered by Fitness)')
         plt.ylabel('Fitness')
         plt.legend()
-        plt.savefig('legend.png', dpi=250)
+        plt.savefig('legacy.png', dpi=250)
 
     def plot_ratios(self):
         plt.figure(31)
@@ -32,7 +32,7 @@ class Plot(object):
             for nn in n:
                 ft.append(nn[1])
                 ng.append(nn[2])
-            plt.plot(ft, ng, linestyle='none', marker='o', label='gen {}'.format(i))
+            plt.plot(ft, ng, linestyle='none', marker='o', markersize=2, label='gen {}'.format(i))
         plt.xlabel('Fast to Total Ratio')
         plt.ylabel('Neutron to Gamma Ratio')
         plt.legend()
