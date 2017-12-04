@@ -5,6 +5,10 @@ from material import test_library
 from operations import ops
 import matplotlib.pyplot as plt
 import copy
+from mpi4py import MPI
+comm = MPI.COMM_WORLD
+rank = comm.Get_rank()
+size = comm.Get_size()
 
 
 class Population(object):
@@ -25,9 +29,9 @@ class Population(object):
         self.max_length = 20
         self.num_disc = 30
         self.num_mat = len(test_library.lib)
-        self.next_gen_size = 240
+        self.next_gen_size = 16
         self.mut_per_gen = 3
-        self.max_population = 240
+        self.max_population = 16
 
     def spawn_random(self, ID):
         chrom = []
@@ -35,7 +39,6 @@ class Population(object):
         chrom += [length]
         for mat in range(self.num_disc):
             chrom += [randint(0, self.num_mat - 1)]
-        print(chrom)
         return Filter(ID, chrom)
 
     def init_current_gen(self):
@@ -43,10 +46,32 @@ class Population(object):
             self.current_generation += [self.spawn_random(self.historic_population)]
             self.historic_population += 1
 
+    def divide_work(self):
+        work = []
+        prev = []
+        new = []
+        for ind in self.current_generation:
+            if ind.fitness == -1:
+                work.append(ind)
+            else:
+                prev.append(ind)
+        # TODO: debug this
+        for ind in range(1, size):
+            l = (ind * (len(work) + 1)) // size
+            r = ((ind + 1) * (len(work) + 1)) // size
+            chunk = work[l:r]
+            comm.send(chunk, dest=ind, tag=ind)
+        for ind in range(1, size):
+            new += comm.recv(source=ind, tag=ind)
+        self.current_generation = prev + new
+
     def run_current_gen(self):
         for ind in self.current_generation:
             if ind.fitness == -1:
                 ind.run_local()
+
+    def gather_work(self):
+        pass
 
     def sort_current_gen(self):
         self.current_generation = sorted(self.current_generation, key=Filter.get_fitness)

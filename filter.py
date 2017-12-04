@@ -155,8 +155,8 @@ class Filter(object):
 
     def run_local(self):
         self.write()
-        os.system('mcnp6 name={}n.i tasks 26'.format(self.ID))
-        os.system('mcnp6 name={}g.i tasks 26'.format(self.ID))
+        os.system('mcnp6 name={}n.i'.format(self.ID))
+        os.system('mcnp6 name={}g.i'.format(self.ID))
         self.extract()
         self.calc_fitness()
 
