@@ -56,11 +56,16 @@ class Population(object):
             else:
                 prev.append(ind)
         # TODO: debug this
+        rate = (len(work) // size) + 1
         for ind in range(1, size):
-            l = (ind * (len(work) + 1)) // size
-            r = ((ind + 1) * (len(work) + 1)) // size
+            l = (ind-1) * rate
+            r = (ind) * rate
             chunk = work[l:r]
             comm.send(chunk, dest=ind, tag=ind)
+        # do own work
+        last_index = (size - 1) * rate
+        for ind in work[last_index:]:
+            ind.run_local()
         for ind in range(1, size):
             new += comm.recv(source=ind, tag=ind)
         self.current_generation = prev + new
@@ -69,9 +74,6 @@ class Population(object):
         for ind in self.current_generation:
             if ind.fitness == -1:
                 ind.run_local()
-
-    def gather_work(self):
-        pass
 
     def sort_current_gen(self):
         self.current_generation = sorted(self.current_generation, key=Filter.get_fitness)
@@ -106,10 +108,11 @@ class Population(object):
         best = self.best_filter
         s = ''
         args = best.fitness, best.fast_to_total, best.neutron_to_gamma, best.n_tot, best.chromosome[0]
-        s += '{:10.6f}  {:10.6f}  {:10.6f}  {:10.6f}  {:10.6f}\n'.format(*args)
+        s += '{:10.6f}  {:10.6f}  {:10.6f}  {:10.6f}  {:10.6f}'.format(*args)
         arr = np.array(best.chromosome[1:])
         for m in arr:
             s += '  {:3d}'.format(m)
+        s += '\n'
         with open('best_filter.txt', 'a+') as F:
             F.write(s)
 
