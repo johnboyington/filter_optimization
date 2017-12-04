@@ -1,3 +1,3 @@
 #!/bin/bash
 
-mpirun -np 17 python parallel_cycle.py
+mpirun -np 17 python driver.py

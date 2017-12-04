@@ -7,7 +7,7 @@ rank = comm.Get_rank()
 size = comm.Get_size()
 
 
-class Test_Cycle(object):
+class Cycle(object):
 
     def __init__(self, start_size, num_gens):
         start_time = time()
@@ -56,7 +56,7 @@ class Test_Cycle(object):
 
 if __name__ == '__main__':
     if rank == 0:
-        test = Test_Cycle(31, 2)
+        test = Cycle(31, 2)
     else:
         done = comm.recv(source=0, tag=rank)
         while not done:
