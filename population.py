@@ -25,9 +25,9 @@ class Population(object):
         self.max_length = 20
         self.num_disc = 30
         self.num_mat = len(test_library.lib)
-        self.next_gen_size = 32
+        self.next_gen_size = 240
         self.mut_per_gen = 3
-        self.max_population = 32
+        self.max_population = 240
 
     def spawn_random(self, ID):
         chrom = []

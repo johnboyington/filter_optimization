@@ -43,4 +43,4 @@ class Test_Cycle(object):
 
 
 if __name__ == '__main__':
-    test = Test_Cycle(32, 4)
+    test = Test_Cycle(240, 25)
