@@ -56,7 +56,7 @@ class Test_Cycle(object):
 
 if __name__ == '__main__':
     if rank == 0:
-        test = Test_Cycle(16, 2)
+        test = Test_Cycle(31, 2)
     else:
         done = comm.recv(source=0, tag=rank)
         while not done:
