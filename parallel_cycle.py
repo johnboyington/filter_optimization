@@ -47,8 +47,8 @@ class Cycle(object):
     def write_info(self):
         s = 'Total Run Time: {}\n'.format(self.total_time)
         total_filters = self.params.start_size * (self.params.num_gens + 1)
-        s += 'Average Filter Calculation Time: {} s'.format(self.total_time / total_filters)
-        s += 'Total Number of Filters Calculated: {}'.format(total_filters)
+        s += 'Average Filter Calculation Time: {} s\n'.format(self.total_time / total_filters)
+        s += 'Total Number of Filters Calculated: {}\n'.format(total_filters)
         s += 'Starting Gen Size: {}\n'.format(self.params.start_size)
         s += 'Total Generations: {}\n'.format(self.params.num_gens + 1)
         s += 'Minimum Filter Length: {}\n'.format(self.params.min_length)
