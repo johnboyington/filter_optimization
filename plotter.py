@@ -10,15 +10,15 @@ class Plot(object):
         self.plot_ratios()
 
     def get_data(self):
-        n = 3
-        g = 31
+        n = 2
+        g = 1000
         self.data = np.loadtxt('data.txt').reshape(n, g, -1)
 
     def plot_legacy(self):
         plt.figure(30)
         for n, i in enumerate(self.data):
             i = i.T
-            plt.plot(range(31), i[0], label='gen {}'.format(n))
+            plt.plot(range(1000), i[0], label='gen {}'.format(n))
         plt.xlabel('Individual (Ordered by Fitness)')
         plt.ylabel('Fitness')
         plt.legend()
