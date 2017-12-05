@@ -114,7 +114,10 @@ class Filter(object):
                 d[keys[i]]['sigma'].append(float(dataStr[2]))
         self.n_tot = d[11]['value'][4] + d[11]['value'][5]
         self.n_g = d[21]['value'][4] + d[21]['value'][5]
-        self.fast_to_total = d[11]['value'][5] / self.n_tot
+        try:
+            self.fast_to_total = d[11]['value'][5] / self.n_tot
+        except:
+            self.fast_to_total = -1
 
     def extract_gamma(self):
         with open('{}g.io'.format(self.ID), 'r') as f:
@@ -143,10 +146,16 @@ class Filter(object):
         os.system('rm {}n.i*'.format(self.ID))
         self.extract_gamma()
         os.system('rm {}g.i*'.format(self.ID))
-        self.neutron_to_gamma = self.n_tot / (self.g_g + self.n_g)
+        try:
+            self.neutron_to_gamma = self.n_tot / (self.g_g + self.n_g)
+        except:
+            self.neutron_to_gamma = -1
 
     def calc_fitness(self):
-        self.fitness = fitness(self.fast_to_total, self.neutron_to_gamma, self.n_tot)
+        if self.neutron_to_gamma == -1 or self.fast_to_total == -1:
+            self.fitness = 0
+        else:
+            self.fitness = fitness(self.fast_to_total, self.neutron_to_gamma, self.n_tot)
 
     def get_fitness(self):
         return self.fitness
