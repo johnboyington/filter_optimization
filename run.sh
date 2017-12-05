@@ -1,3 +1,3 @@
 #!/bin/bash
 
-mpirun -np 17 python driver.py
+mpirun -np 26 python driver.py

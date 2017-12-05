@@ -46,7 +46,11 @@ class Cycle(object):
 
     def write_info(self):
         s = 'Total Run Time: {}\n'.format(self.total_time)
-        s += 'Starting Gen Size: {}'.format(self.params.start_size)
+        s += 'Starting Gen Size: {}\n'.format(self.params.start_size)
+        s += 'Total Generations: {}\n'.format(self.params.num_gens + 1)
+        s += 'Minimum Filter Length: {}\n'.format(self.params.min_length)
+        s += 'Maximum Filter Length: {}\n'.format(self.params.max_length)
+        s += 'Number of Filter Discretizations: {}\n'.format(self.params.num_disc)
         with open('info.txt', 'w+') as F:
             F.write(s)
 
