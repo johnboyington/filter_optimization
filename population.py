@@ -16,7 +16,6 @@ class Population(object):
     def __init__(self, initial_pop, store_all):
         self.initial_population = initial_pop
         self.params = Parameters()
-        self.set_params()
         self.current_generation = []
         self.historic_population = 0
         self.next_generation = []

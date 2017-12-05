@@ -14,7 +14,6 @@ class Filter(object):
         self.chromosome = chromosome
         self.length = self.chromosome[0]
         self.materials = self.chromosome[1:]
-        self.set_params()
         self.get_materials()
         self.fitness = -1
 

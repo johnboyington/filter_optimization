@@ -10,7 +10,7 @@ class Driver(object):
 
     def __init__(self):
         if rank == 0:
-            Cycle(31, 2)
+            Cycle()
         else:
             done = comm.recv(source=0, tag=rank)
             while not done:

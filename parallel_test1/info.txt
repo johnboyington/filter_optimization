@@ -1,0 +1,6 @@
+Total Run Time: 840.9359202384949
+Starting Gen Size: 98
+Total Generations: 6
+Minimum Filter Length: 3
+Maximum Filter Length: 20
+Number of Filter Discretizations: 30
