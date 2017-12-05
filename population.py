@@ -29,7 +29,7 @@ class Population(object):
         length = rand() * (self.params.max_length - self.params.min_length) + self.params.min_length
         chrom += [length]
         for mat in range(self.params.num_disc):
-            chrom += [randint(0, self.params.num_mat - 1)]
+            chrom += [randint(0, self.params.num_mat)]
         return Filter(ID, chrom)
 
     def init_current_gen(self):
@@ -46,7 +46,6 @@ class Population(object):
                 work.append(ind)
             else:
                 prev.append(ind)
-        # TODO: debug this
         rate = (len(work) // size) + 1
         for ind in range(1, size):
             l = (ind-1) * rate
