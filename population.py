@@ -1,7 +1,7 @@
 from filter import Filter
+from parameters import Parameters
 from numpy.random import rand, randint
 import numpy as np
-from material import test_library
 from operations import ops
 import matplotlib.pyplot as plt
 import copy
@@ -15,6 +15,7 @@ class Population(object):
 
     def __init__(self, initial_pop, store_all):
         self.initial_population = initial_pop
+        self.params = Parameters()
         self.set_params()
         self.current_generation = []
         self.historic_population = 0
@@ -24,21 +25,12 @@ class Population(object):
             self.store_all
             self.legacy = []
 
-    def set_params(self):
-        self.min_length = 3
-        self.max_length = 20
-        self.num_disc = 30
-        self.num_mat = len(test_library.lib)
-        self.next_gen_size = 31
-        self.mut_per_gen = 3
-        self.max_population = 31
-
     def spawn_random(self, ID):
         chrom = []
-        length = rand() * (self.max_length - self.min_length) + self.min_length
+        length = rand() * (self.params.max_length - self.params.min_length) + self.params.min_length
         chrom += [length]
-        for mat in range(self.num_disc):
-            chrom += [randint(0, self.num_mat - 1)]
+        for mat in range(self.params.num_disc):
+            chrom += [randint(0, self.params.num_mat - 1)]
         return Filter(ID, chrom)
 
     def init_current_gen(self):
@@ -79,8 +71,8 @@ class Population(object):
         self.current_generation = sorted(self.current_generation, key=Filter.get_fitness)
         self.best_filter = self.current_generation[-1]
         self.legacy.append(copy.deepcopy(self.current_generation))
-        if len(self.current_generation) > self.max_population:
-            self.current_generation = self.current_generation[-self.max_population:]
+        if len(self.current_generation) > self.params.max_population:
+            self.current_generation = self.current_generation[-self.params.max_population:]
         # calculate CDF
         pdf = []
         for i in self.current_generation:
@@ -133,10 +125,10 @@ class Population(object):
         return parent_1, parent_2
 
     def init_next_gen(self):
-        for i in range(self.next_gen_size):
+        for i in range(self.params.next_gen_size):
             self.next_generation += [ops.splice(self.historic_population, *self.select())]
             self.historic_population += 1
-        for i in range(self.mut_per_gen):
+        for i in range(self.params.mut_per_gen):
             lucky = randint(0, len(self.next_generation) - 1)
             self.next_generation[lucky] = ops.mutate(self.next_generation[lucky])
         self.current_generation += self.next_generation

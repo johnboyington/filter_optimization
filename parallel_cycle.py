@@ -1,5 +1,6 @@
 from population import Population
 from time import time
+from parameters import Parameters
 from slave import slave
 from mpi4py import MPI
 comm = MPI.COMM_WORLD
@@ -9,24 +10,23 @@ size = comm.Get_size()
 
 class Cycle(object):
 
-    def __init__(self, start_size, num_gens):
+    def __init__(self):
         start_time = time()
-        self.start_size = start_size
-        self.num_generations = num_gens
+        self.params = Parameters()
         self.iterate()
         self.total_time = time() - start_time
         self.write_info()
 
     def iterate(self):
         self.origin()
-        for i in range(self.num_generations):
+        for i in range(self.params.num_gens):
             self.cycle()
         for ind in range(1, size):
             comm.send(True, dest=ind, tag=ind)
         self.test.store_best_filter()
 
     def origin(self):
-        self.test = Population(self.start_size, store_all=True)
+        self.test = Population(self.params.start_size, store_all=True)
         self.test.init_current_gen()
         self.parallel()
         self.test.sort_current_gen()
@@ -46,7 +46,7 @@ class Cycle(object):
 
     def write_info(self):
         s = 'Total Run Time: {}\n'.format(self.total_time)
-        s += 'Starting Gen Size: {}'.format(self.start_size)
+        s += 'Starting Gen Size: {}'.format(self.params.start_size)
         with open('info.txt', 'w+') as F:
             F.write(s)
 
