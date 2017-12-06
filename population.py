@@ -54,7 +54,8 @@ class Population(object):
             comm.send(chunk, dest=ind, tag=ind)
         # do own work
         last_index = (size - 1) * rate
-        for ind in work[last_index:]:
+        new = work[last_index:]
+        for ind in new:
             ind.run_local()
         for ind in range(1, size):
             new += comm.recv(source=ind, tag=ind)
