@@ -1,0 +1,8 @@
+Total Run Time: 288.2680780887604
+Average Filter Calculation Time: 3.843574374516805 s
+Total Number of Filters Calculated: 75
+Starting Gen Size: 25
+Total Generations: 3
+Minimum Filter Length: 3
+Maximum Filter Length: 20
+Number of Filter Discretizations: 30
