@@ -4,7 +4,7 @@ from material import test_library
 class Parameters(object):
 
     def __init__(self):
-        self.start_size = 30
+        self.start_size = 25
         self.num_gens = 2
         self.min_length = 3
         self.max_length = 20
