@@ -124,6 +124,7 @@ class Population(object):
         return parent_1, parent_2
 
     def init_next_gen(self):
+        self.next_generation = []
         for i in range(self.params.next_gen_size):
             self.next_generation += [ops.splice(self.historic_population, *self.select())]
             self.historic_population += 1

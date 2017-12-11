@@ -1,6 +1,7 @@
 from parameters import Parameters
 from material import test_library
 import os
+import subprocess
 import re
 from fitness_function import fitness
 
@@ -142,9 +143,9 @@ class Filter(object):
 
     def extract(self):
         self.extract_neutron()
-        os.system('rm {}n.i*'.format(self.ID))
+        subprocess.call(['rm {}n.i*'.format(self.ID)], shell=True)
         self.extract_gamma()
-        os.system('rm {}g.i*'.format(self.ID))
+        subprocess.call(['rm {}g.i*'.format(self.ID)], shell=True)
         try:
             self.neutron_to_gamma = self.n_tot / (self.g_g + self.n_g)
         except:
@@ -161,8 +162,10 @@ class Filter(object):
 
     def run_local(self):
         self.write()
-        os.system('mcnp6 name={}n.i'.format(self.ID))
-        os.system('mcnp6 name={}g.i'.format(self.ID))
+        with open('dump{}.txt'.format(self.ID), 'w+') as dump:
+            subprocess.call(['mcnp6', 'name={}n.i'.format(self.ID)], stdout=dump)
+            subprocess.call(['mcnp6', 'name={}g.i'.format(self.ID)], stdout=dump)
+        subprocess.call(['rm', 'dump{}.txt'.format(self.ID)])
         self.extract()
         self.calc_fitness()
 

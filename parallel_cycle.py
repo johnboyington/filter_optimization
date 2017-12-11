@@ -20,12 +20,14 @@ class Cycle(object):
     def iterate(self):
         self.origin()
         for i in range(self.params.num_gens):
+            print('Running generation {}'.format(i + 1), flush=True)
             self.cycle()
         for ind in range(1, size):
             comm.send(True, dest=ind, tag=ind)
         self.test.store_best_filter()
 
     def origin(self):
+        print('Initializing Population...', flush=True)
         self.test = Population(self.params.start_size, store_all=True)
         self.test.init_current_gen()
         self.parallel()
