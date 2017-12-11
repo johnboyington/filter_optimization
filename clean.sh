@@ -7,4 +7,5 @@ rm fort*
 rm best_filter.txt
 rm data.txt
 rm info.txt
+rm *.png
 clear
