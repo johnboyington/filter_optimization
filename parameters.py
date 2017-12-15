@@ -4,10 +4,10 @@ from material import test_library
 class Parameters(object):
 
     def __init__(self):
-        self.start_size = 25
-        self.num_gens = 2
-        self.min_length = 3
-        self.max_length = 20
+        self.start_size = 2100
+        self.num_gens = 20
+        self.min_length = 10
+        self.max_length = 30
         self.num_disc = 10
         self.num_mat = len(test_library.lib)
         self.next_gen_size = self.start_size

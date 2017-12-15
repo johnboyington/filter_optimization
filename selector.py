@@ -1,4 +1,5 @@
 import numpy as np
+from filter import Filter
 
 
 class Selector(object):
@@ -7,8 +8,9 @@ class Selector(object):
         self.ft_constraint = ft
         self.ng_constraint = ng
         self.load_data()
-        #self.constrain_ft()
+        # self.constrain_ft()
         self.constrain_ng()
+        self.make_best()
 
     def load_data(self):
         self.data = np.loadtxt('data.txt')
@@ -20,6 +22,7 @@ class Selector(object):
                 new.append(f)
         new = sorted(new, key=lambda x: x[2])
         print(new[-1])
+        self.best_chrom = new[-1]
 
     def constrain_ng(self):
         new = []
@@ -30,6 +33,12 @@ class Selector(object):
         print(new[-1])
         for i in new[-1]:
             print(i)
+        self.best_chrom = new[-1]
+
+    def make_best(self):
+        self.best = Filter(self.best_chrom)
+        self.best.write()
+
 
 if True:
     Selector(0.9, 1)
