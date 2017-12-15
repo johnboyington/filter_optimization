@@ -35,6 +35,8 @@ class Plot(object):
             plt.plot(ft, ng, linestyle='none', marker='o', markersize=2, label='gen {}'.format(i))
         plt.xlabel('Fast to Total Ratio')
         plt.ylabel('Neutron to Gamma Ratio')
+        plt.xlim(0.85, 1)
+        plt.ylim(0, 5)
         plt.legend()
         plt.savefig('ratios.png', dpi=250)
 
