@@ -20,7 +20,7 @@ class Operations(object):
         return Filter(child_ID, child_chrom)
 
     def mutate(self, individual):
-        gene = randint(0, 30)
+        gene = randint(0, self.params.num_disc)
         assert isinstance(individual, Filter), 'mutating requires Filter objects'
         if gene == 0:
             new_gene = rand() * (self.params.max_length - self.params.min_length) + self.params.min_length
