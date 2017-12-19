@@ -5,7 +5,7 @@ class Parameters(object):
 
     def __init__(self):
         self.start_size = 2100
-        self.num_gens = 25
+        self.num_gens = 20
         self.min_length = 10
         self.max_length = 30
         self.num_disc = 10
