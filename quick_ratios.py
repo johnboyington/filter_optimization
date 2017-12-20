@@ -16,4 +16,5 @@ flux_out = flux_in * tot_n
 
 print('The FT ratio: {}'.format(ft))
 print('The NG ratio: {}'.format(ng))
-print('Outgoing flux: {:10.6E} 1/cm^2s'.format(flux_out))
+print('Incoming Flux: flux: {:10.6E} 1/cm^2s'.format(flux_in))
+print('Outgoing Flux: {:10.6E} 1/cm^2s'.format(flux_out))
