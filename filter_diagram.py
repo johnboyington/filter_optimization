@@ -16,7 +16,7 @@ class Diagram(object):
         ax.set_xlim(-10, 25)
         ax.set_ylim(-10, 10)
 
-        slabs = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+        slabs = [0, 0.1, 2.64, 5.18, 20]
         mats = m
         ecolors = ['k', 'darkgreen', 'darkblue', 'maroon', 'darkgoldenrod']
         fcolors = ['k', 'forestgreen', 'blue', 'red', 'goldenrod']
@@ -32,8 +32,8 @@ class Diagram(object):
         ax.add_patch(Ellipse((0, 0), 0.5, 2.54, fill=False))
         ax.add_patch(Arrow(0, 0, 3, 0, width=2.5, color='black'))
         ax.add_patch(Polygon([[slabs[-1], -0.5], [slabs[-1]+1, -0.5], [slabs[-1]+1, 0.5], [slabs[-1], 0.5]], closed=True,
-                                 fill=True, edgecolor='black', facecolor='black',
-                                 linewidth=0.8))
+                             fill=True, edgecolor='black', facecolor='black',
+                             linewidth=0.8))
         ax.plot([-5, 0], [1.27, 1.27], 'k', linewidth=0.8)
         ax.plot([-5, 0], [-1.27, -1.27], 'k', linewidth=0.8)
         # text
@@ -41,8 +41,16 @@ class Diagram(object):
         ax.text(-5, 2, 'Source')
 
         # add ratio info
-        ax.text(-5, -8, 'FT Ratio: {}'.format(ft))
-        ax.text(11, -8, 'NG Ratio: {}'.format(ng))
+        # ax.text(-5, -8, 'FT Ratio: {}'.format(ft))
+        # ax.text(11, -8, 'NG Ratio: {}'.format(ng))
+
+        # add text for materials
+        ax.text(-6, 7, 'Cadmium')
+        ax.plot([-3, 0], [6.5, 4], 'k', linewidth=0.8)
+        ax.text(2, 8, 'Borated Polyethylene')
+        ax.plot([8, 4], [7.5, 4], 'k', linewidth=0.8)
+        ax.text(15, 7, 'Lead')
+        ax.plot([16, 14], [6.5, 4], 'k', linewidth=0.8)
 
         ax.axes.get_yaxis().set_visible(False)
 
@@ -51,5 +59,5 @@ class Diagram(object):
 
 
 if __name__ == '__main__':
-    m = [1, 2, 1, 2, 4, 1, 2, 2, 2, 2]
+    m = [4, 1, 1, 2]
     Diagram(m, 'filter', 0.9, 1.5)
