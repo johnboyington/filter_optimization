@@ -4,10 +4,10 @@ from matplotlib.patches import Ellipse, Polygon, Arrow
 
 class Diagram(object):
 
-    def __init__(self):
-        self.draw()
+    def __init__(self, m, name, ft, ng):
+        self.draw(m, name, ft, ng)
 
-    def draw(self):
+    def draw(self, m, name, ft, ng):
         fig = plt.figure(0)
         ax = fig.add_subplot(111)
         ax.spines['top'].set_visible(False)
@@ -16,8 +16,8 @@ class Diagram(object):
         ax.set_xlim(-10, 25)
         ax.set_ylim(-10, 10)
 
-        slabs = [0, 2, 4, 6, 8, 10, 12, 20]
-        mats = [1, 2, 1, 2, 4, 1, 2, 2, 2, 2]
+        slabs = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+        mats = m
         ecolors = ['k', 'darkgreen', 'darkblue', 'maroon', 'darkgoldenrod']
         fcolors = ['k', 'forestgreen', 'blue', 'red', 'goldenrod']
         hatches = ['//', '\\', '//', '\\', '//']
@@ -39,10 +39,17 @@ class Diagram(object):
         # text
         ax.text(21, 2, 'Detector')
         ax.text(-5, 2, 'Source')
-        
+
+        # add ratio info
+        ax.text(-5, -8, 'FT Ratio: {}'.format(ft))
+        ax.text(11, -8, 'NG Ratio: {}'.format(ng))
+
         ax.axes.get_yaxis().set_visible(False)
 
-        fig.savefig('filter.png', dpi=300)
-        
+        fig.savefig('{}.png'.format(name), dpi=300)
+        plt.close(fig)
 
-Diagram()
+
+if __name__ == '__main__':
+    m = [1, 2, 1, 2, 4, 1, 2, 2, 2, 2]
+    Diagram(m, 'filter', 0.9, 1.5)
